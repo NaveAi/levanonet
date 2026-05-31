@@ -21,7 +21,7 @@ export async function NavHeader() {
           </span>
           <div className="leading-tight">
             <span className="block text-base font-bold bg-gradient-to-l from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
-              לו
+              לבנונט
             </span>
             <span className="hidden text-[10px] text-zinc-500 sm:block">רשת המשפחה</span>
           </div>
