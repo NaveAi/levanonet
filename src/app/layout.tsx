@@ -12,7 +12,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "לו — רשת המשפחה",
+  title: "לבנונט — רשת המשפחה",
   description: "רשת חברתית משפחתית פרטית",
 };
 
