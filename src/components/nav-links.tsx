@@ -2,58 +2,42 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Home, Settings, Shield } from "lucide-react";
+import { Home, Settings, Users, User } from "lucide-react";
 
-export function NavLinks({
-  username,
-  isAdmin,
-}: {
-  username?: string;
-  isAdmin?: boolean;
-}) {
+const links = [
+  { href: "/", label: "דף הבית", icon: Home },
+  { href: "/family-tree", label: "אילן יוחסין", icon: Users },
+  { href: "/profile/me", label: "הפרופיל שלי", icon: User },
+  { href: "/settings", label: "הגדרות", icon: Settings },
+];
+
+export function NavLinks() {
   const pathname = usePathname();
 
-  const links = [
-    { href: "/", icon: Home, label: "פיד", match: (p: string) => p === "/" },
-    {
-      href: username ? `/profile/${username}` : "/settings",
-      icon: null,
-      label: "פרופיל",
-      match: (p: string) => p.startsWith("/profile"),
-      isProfile: true,
-    },
-    { href: "/settings", icon: Settings, label: "הגדרות", match: (p: string) => p === "/settings" },
-    ...(isAdmin
-      ? [{ href: "/admin", icon: Shield, label: "ניהול", match: (p: string) => p === "/admin" }]
-      : []),
-  ];
-
   return (
-    <>
+    <nav className="flex gap-2">
       {links.map((link) => {
-        const active = link.match(pathname);
-        if (link.isProfile) return null;
-        const Icon = link.icon!;
+        const Icon = link.icon;
+        const isActive = pathname === link.href;
+
         return (
           <Link
             key={link.href}
             href={link.href}
-            title={link.label}
-            className={cn(
-              "relative rounded-xl p-2.5 transition-all duration-200 interactive-scale",
-              active
-                ? "bg-violet-500/15 text-violet-600 dark:text-violet-400"
-                : "text-zinc-500 hover:bg-violet-500/10 hover:text-violet-600 dark:text-zinc-400"
-            )}
+            className={`
+              flex items-center gap-2 px-3 py-2 rounded-lg transition-colors
+              ${
+                isActive
+                  ? "bg-violet-600 text-white"
+                  : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              }
+            `}
           >
-            <Icon className="h-5 w-5" />
-            {active && (
-              <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-violet-500" />
-            )}
+            <Icon size={18} />
+            <span className="text-sm font-medium">{link.label}</span>
           </Link>
         );
       })}
-    </>
+    </nav>
   );
 }

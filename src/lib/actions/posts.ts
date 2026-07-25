@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { saveImage } from "@/lib/upload";
 import { ALLOWED_EMOJIS, MAX_COMMENT_LENGTH, MAX_POST_LENGTH, MAX_REACTION_TEXT } from "@/lib/constants";
+import { addAIBotComment } from "@/lib/actions/ai-bot";
 import type { ActionResult } from "./auth";
 
 async function requireUser() {
@@ -33,9 +34,14 @@ export async function createPost(formData: FormData): Promise<ActionResult> {
       imageUrl = await saveImage(image);
     }
 
-    await prisma.post.create({
+    const post = await prisma.post.create({
       data: { authorId: user.id, content: content || "📷", imageUrl },
     });
+
+    // AI Bot may add a comment
+    setTimeout(() => {
+      addAIBotComment(post.id).catch((e) => console.error(e));
+    }, 5000); // 5 second delay
 
     revalidatePath("/");
     return { ok: true };

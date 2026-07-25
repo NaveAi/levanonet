@@ -1,6 +1,7 @@
 {
   "name": "lev_net",
-  "version": "0.1.0",
+  "version": "2.0.0",
+  "description": "Family social network with genealogy tree and AI bot",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +10,8 @@
     "lint": "eslint",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "setup-v2": "bash setup-v2.sh"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1057.0",
@@ -37,5 +39,26 @@
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "features": {
+    "family-tree": "🌳 Visual genealogy with parent-child, spouse, sibling relationships",
+    "ai-bot": "🤖 Humorous AI bot that comments on family posts (30% chance, 5s delay)",
+    "prisma": "📊 Prisma ORM with PostgreSQL support",
+    "auth": "🔐 NextAuth v5 with JWT strategy",
+    "s3-support": "☁️ AWS S3 optional for image storage"
+  },
+  "keywords": [
+    "family",
+    "social-network",
+    "genealogy",
+    "family-tree",
+    "ai-bot",
+    "hebrew",
+    "next.js",
+    "prisma",
+    "react"
+  ],
+  "author": "NaveAi",
+  "repository": "https://github.com/NaveAi/levanonet",
+  "homepage": "https://levanonet.vercel.app"
 }
