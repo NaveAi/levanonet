@@ -10,6 +10,7 @@ datasource db {
 enum Role {
   MEMBER
   ADMIN
+  BOT
 }
 
 enum Theme {
@@ -31,15 +32,35 @@ model User {
   displayName  String
   bio          String?
   avatarUrl    String?
-  role         Role      @default(MEMBER)
+  role         Role      @default(MEMBER)          // MEMBER | ADMIN | BOT
   banned       Boolean   @default(false)
+  isBot        Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  settings  UserSettings?
-  posts     Post[]
-  comments  Comment[]
-  reactions Reaction[]
+  settings      UserSettings?
+  posts         Post[]
+  comments      Comment[]
+  reactions     Reaction[]
+  
+  // Family tree relationships
+  parentRelations   FamilyRelation[] @relation("parent")
+  childRelations    FamilyRelation[] @relation("child")
+  spouseRelations   FamilyRelation[] @relation("spouse")
+}
+
+model FamilyRelation {
+  id            String   @id @default(cuid())
+  parentId      String
+  parent        User     @relation("parent", fields: [parentId], references: [id], onDelete: Cascade)
+  childId       String
+  child         User     @relation("child", fields: [childId], references: [id], onDelete: Cascade)
+  relationshipType String  // "parent-child" | "spouse" | "sibling"
+  createdAt     DateTime @default(now())
+
+  @@unique([parentId, childId, relationshipType])
+  @@index([parentId])
+  @@index([childId])
 }
 
 model UserSettings {
@@ -70,6 +91,7 @@ model Post {
   reactions Reaction[]
 
   @@index([createdAt])
+  @@index([authorId])
 }
 
 model Comment {
@@ -84,12 +106,13 @@ model Comment {
   reactions Reaction[]
 
   @@index([postId])
+  @@index([authorId])
 }
 
 model Reaction {
   id        String   @id @default(cuid())
-  emoji     String?
-  text      String?
+  emoji     String?  // One of: ❤️, 👍, 😂, 😮, 😢, 🎉, 🔥, 👏
+  text      String?  // Short text reaction (up to 40 chars)
   authorId  String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   postId    String?
