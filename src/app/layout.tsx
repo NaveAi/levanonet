@@ -5,6 +5,7 @@ import { NavHeader } from "@/components/nav-header";
 import { Providers } from "@/components/providers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { initializeAIBot } from "@/lib/actions/ai-bot";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Initialize AI Bot on app startup
+  await initializeAIBot().catch((e) => console.error("Failed to initialize AI Bot:", e));
+
   const session = await auth();
   let htmlClass = "";
   let bodyClass = "";
