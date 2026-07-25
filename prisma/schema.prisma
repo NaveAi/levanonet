@@ -46,7 +46,6 @@ model User {
   // Family tree relationships
   parentRelations   FamilyRelation[] @relation("parent")
   childRelations    FamilyRelation[] @relation("child")
-  spouseRelations   FamilyRelation[] @relation("spouse")
 }
 
 model FamilyRelation {
